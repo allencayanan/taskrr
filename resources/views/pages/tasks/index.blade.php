@@ -49,6 +49,9 @@
           </div>
           <div class="card-footer">
             @include('pages.tasks.components.status', ['status' => $task->status])
+            @if ($task->sub_tasks_count)
+              <span class="badge rounded-pill bg-success">{{ $task->sub_tasks_count }} Subtasks</span>
+            @endif
           </div>
         </div>
       </div>

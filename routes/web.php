@@ -31,8 +31,6 @@ Route::controller(RegisterController::class)->name('register.')->group(function 
 });
 
 Route::middleware('auth:web')->group(function () {
-    // Route::resource('tasks', TaskController::class)->withTrashed(['show']);
-
     Route::prefix('tasks')->group(function () {
         Route::controller(TaskController::class)
             ->name('tasks.')

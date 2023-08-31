@@ -26,6 +26,7 @@ class TaskController extends Controller
 
         $tasks = Task::where('user_id', $user->id)
             ->with('subTasks')
+            ->withCount('subTasks')
             ->when(! empty($search), function ($query) use ($search) {
                 $query->where('title', 'like', '%' . $search . '%')
                     ->orWhere('description', 'like', '%' . $search . '%');
