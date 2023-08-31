@@ -18,7 +18,7 @@ class TaskPolicy
      */
     public function viewAny(User $user)
     {
-        return true;
+        return $user->can('view any task');
     }
 
     /**
@@ -30,7 +30,7 @@ class TaskPolicy
      */
     public function view(User $user, Task $task)
     {
-        return $task->user_id === $user->id;
+        return $user->can('view tasks') && $task->user_id === $user->id;
     }
 
     /**
@@ -41,7 +41,7 @@ class TaskPolicy
      */
     public function create(User $user)
     {
-        return true;
+        return $user->can('create tasks');
     }
 
     /**
@@ -53,7 +53,7 @@ class TaskPolicy
      */
     public function update(User $user, Task $task)
     {
-        return $task->user_id === $user->id;
+        return $user->can('update tasks') && $task->user_id === $user->id;
     }
 
     /**
@@ -65,7 +65,7 @@ class TaskPolicy
      */
     public function delete(User $user, Task $task)
     {
-        return $task->user_id === $user->id;
+        return $user->can('delete tasks') && $task->user_id === $user->id;
     }
 
     /**
@@ -77,7 +77,7 @@ class TaskPolicy
      */
     public function restore(User $user, Task $task)
     {
-        return $task->user_id === $user->id;
+        return false;
     }
 
     /**
@@ -89,6 +89,6 @@ class TaskPolicy
      */
     public function forceDelete(User $user, Task $task)
     {
-        return $task->user_id === $user->id;
+        return $user->can('force delete tasks') && $task->user_id === $user->id;
     }
 }

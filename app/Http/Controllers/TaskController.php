@@ -25,7 +25,8 @@ class TaskController extends Controller
         }
 
         $tasks = Task::where('user_id', $user->id)
-            ->when($search, function ($query) use ($search) {
+            ->with('subTasks')
+            ->when(! empty($search), function ($query) use ($search) {
                 $query->where('title', 'like', '%' . $search . '%')
                     ->orWhere('description', 'like', '%' . $search . '%');
             })
@@ -75,6 +76,10 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
+        $task->load([
+            'subTasks' => function ($query) { $query->withTrashed(); }
+        ]);
+
         return view('pages.tasks.show', compact('task'));
     }
 
@@ -111,10 +116,12 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        $task->update([
-            'status' => Task::STATUS_TRASHED,
-        ]);
-        $task->delete();
+        if ($task->trashed()) {
+            $task->subTasks()->forceDelete();
+            $task->forceDelete();
+        } else {
+            $task->delete();
+        }
 
         return redirect()->route('tasks.index');
     }

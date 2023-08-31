@@ -38,7 +38,7 @@
   <div class="row mt-5">
     @foreach ($tasks as $task)
       <div class="col-3">
-        <div class="card">
+        <div class="card mt-4">
           <div class="card-body">
             <div class="card-title">
               <h4><a href="{{ route('tasks.show', $task->id) }}">{{ $task->title }}</a></h4>

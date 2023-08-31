@@ -18,7 +18,7 @@ class SubTaskPolicy
      */
     public function viewAny(User $user)
     {
-        return true;
+        return $user->can('view any subtask');
     }
 
     /**
@@ -30,7 +30,7 @@ class SubTaskPolicy
      */
     public function view(User $user, SubTask $subTask)
     {
-        return optional($subTask->task)->user_id === $user->id;
+        return $user->can('view subtasks') && optional($subTask->task)->user_id === $user->id;
     }
 
     /**
@@ -41,7 +41,7 @@ class SubTaskPolicy
      */
     public function create(User $user)
     {
-        return true;
+        return $user->can('create subtasks');
     }
 
     /**
@@ -53,7 +53,7 @@ class SubTaskPolicy
      */
     public function update(User $user, SubTask $subTask)
     {
-        return optional($subTask->task)->user_id === $user->id;
+        return $user->can('update subtasks') && optional($subTask->task)->user_id === $user->id;
     }
 
     /**
@@ -65,7 +65,7 @@ class SubTaskPolicy
      */
     public function delete(User $user, SubTask $subTask)
     {
-        return optional($subTask->task)->user_id === $user->id;
+        return $user->can('dekete subtasks') && optional($subTask->task)->user_id === $user->id;
     }
 
     /**
@@ -77,7 +77,7 @@ class SubTaskPolicy
      */
     public function restore(User $user, SubTask $subTask)
     {
-        return optional($subTask->task)->user_id === $user->id;
+        return false;
     }
 
     /**
@@ -89,6 +89,6 @@ class SubTaskPolicy
      */
     public function forceDelete(User $user, SubTask $subTask)
     {
-        return optional($subTask->task)->user_id === $user->id;
+        return $user->can('force delete subtasks') && optional($subTask->task)->user_id === $user->id;
     }
 }

@@ -31,6 +31,31 @@ Route::controller(RegisterController::class)->name('register.')->group(function 
 });
 
 Route::middleware('auth:web')->group(function () {
-    Route::resource('tasks', TaskController::class);
-    Route::resource('subtasks', SubTaskController::class);
+    // Route::resource('tasks', TaskController::class)->withTrashed(['show']);
+
+    Route::prefix('tasks')->group(function () {
+        Route::controller(TaskController::class)
+            ->name('tasks.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('create', 'create')->name('create');
+                Route::get('{task}', 'show')->name('show')->withTrashed();
+                Route::post('/', 'store')->name('store');
+                Route::get('{task}/edit', 'edit')->name('edit');
+                Route::put('{task}', 'update')->name('update');
+                Route::delete('{task}', 'destroy')->name('destroy')->withTrashed();
+            });
+
+        Route::controller(SubTaskController::class)
+            ->name('subtasks.')
+            ->prefix('{task}/subtasks')
+            ->group(function () {
+                Route::get('create', 'create')->name('create');
+                Route::post('/', 'store')->name('store');
+                Route::get('{subTask}/edit', 'edit')->name('edit');
+                Route::put('{subTask}', 'update')->name('update');
+                Route::delete('{subTask}', 'destroy')->name('destroy');
+            });
+    });
+
 });

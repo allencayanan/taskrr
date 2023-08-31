@@ -16,7 +16,7 @@
         <a class="navbar-brand" href="{{ route('tasks.index') }}">Taskrr</a>
         @auth
 
-          <form class="d-flex" action="{{ request()->fullUrlWithQuery([]) }}">
+          <form class="d-flex" action="{{ route('tasks.index') }}">
             <input class="form-control me-2" type="search" placeholder="Search" name="search" value="{{ request()->input('search') }}">
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
